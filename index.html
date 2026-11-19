@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Report a Bug - Wyndlewood</title>
+<style>
+  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center; background:#1b1712; color:#efe6d6; font:17px Georgia, serif; text-align:center; padding: 20px; }
+  .muted { color:#b9a88d; font: 14px system-ui, sans-serif; }
+</style>
+</head>
+<body>
+<div id="m"><p>Opening the Wyndlewood bug report form...</p></div>
+<script>
+// The bug server runs on a home PC and its address can change; it writes the current one to endpoint.json here.
+fetch('endpoint.json?t=' + Date.now(), { cache: 'no-store' })
+  .then(function (r) { return r.json(); })
+  .then(function (j) {
+    return fetch(j.url + '/health', { cache: 'no-store' }).then(function (h) {
+      if (!h.ok) throw new Error('down');
+      location.replace(j.form + location.search);
+    });
+  })
+  .catch(function () {
+    document.getElementById('m').innerHTML = '<p>The bug report server is offline right now.</p><p class="muted">Please try again in a few minutes, or post the bug in the Wyndlewood Discord.</p>';
+  });
+</script>
+</body>
+</html>
